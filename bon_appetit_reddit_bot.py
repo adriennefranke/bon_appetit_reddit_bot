@@ -15,6 +15,6 @@ for comment in subreddit.stream.comments():
 			bon_appetit_url = url
 
 		bot_response = "[{}]({})".format(recipe_name, bon_appetit_url)
-		print(bot_response)
+		comment.reply(bot_response)
 	else:
 		pass
