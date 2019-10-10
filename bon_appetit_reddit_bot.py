@@ -1,19 +1,20 @@
 import praw
 import config
+from googlesearch import search
 
-r = praw.Reddit(client_id=config.client_id, client_secret=config.client_secret, user_agent=config.user_agent, username=config.username, password=config.password)
+reddit = praw.Reddit(client_id=config.client_id, client_secret=config.client_secret, user_agent=config.user_agent, username=config.username, password=config.password)
 
-subreddit = r.subreddit('bon_appetit')
+subreddit = reddit.subreddit('bon_appetit')
 
-comments = subreddit.stream.comments()
+for comment in subreddit.stream.comments():
+	if "BonAppetitBot" in str(comment.body):
+		recipe_name = str(comment.body).split(":")[1].strip()
+		search_string = '"Bon Appetit"' + recipe_name
 
-for comment in comments:
-	print(str(comment.body))
+		for url in search(search_string, stop=1):
+			bon_appetit_url = url
 
-# UA = 'bon appetit subreddit recipe bo. contact me at /u/adriennefranke or adri.j.franke@gmail.com'
-# r = praw.Reddit(UA)
-
-
-# for c in praw.helpers.comment_stream(r, 'bon_appetit'):
-# 	if check_condition(c):
-# 		bot_action(c)
+		bot_response = "[{}]({})".format(recipe_name, bon_appetit_url)
+		print(bot_response)
+	else:
+		pass
