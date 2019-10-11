@@ -8,13 +8,20 @@ subreddit = reddit.subreddit('bon_appetit')
 
 for comment in subreddit.stream.comments():
 	if "BonAppetitBot" in str(comment.body):
-		recipe_name = str(comment.body).split(":")[1].strip()
+		recipe_name = str(comment.body).split("!")[1].strip()
 		search_string = '"Bon Appetit"' + recipe_name
 
-		for url in search(search_string, stop=1):
-			bon_appetit_url = url
+		for url in search(search_string, stop=3):
+			if "bonappetit.com" in url:
+				print(url)
+				bon_appetit_url = url
+				bot_response = "[{}]({})".format(recipe_name, bon_appetit_url)
 
-		bot_response = "[{}]({})".format(recipe_name, bon_appetit_url)
-		comment.reply(bot_response)
-	else:
-		pass
+				break
+
+			else:
+				bot_response = "I'm sorry, I couldn't find the right www.bonappetit.com link :("
+
+				break
+
+comment.reply(bot_response)
